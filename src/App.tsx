@@ -1,44 +1,41 @@
-import { useState } from 'react'
-import logo from './logo.svg'
-import './App.css'
+import { GlobalStyle } from "./elements/base"
+import { ThemeProvider } from "styled-components"
+import { MainContainer } from "./elements/containers"
+import { TopBar } from "./components/top-bar"
+import { Page } from "./components/main"
+import { Footer } from "./components/footer"
+import { lightTheme, darkTheme } from "./elements/base/themes"
+import { useState, createContext } from "react"
+import { Outlet } from "react-router-dom"
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [palette, setPalette] = useState(lightTheme)
+  const [isDark, setIsDark] = useState(false)
+
+  function handleThemeSwitch() {
+    palette === darkTheme ? setPalette(lightTheme) : setPalette(darkTheme)
+    setIsDark(!isDark)
+  }
+
+  const GeneralThemeProps = {
+    palette,
+    setPalette,
+    isDark,
+    setIsDark,
+    handleThemeSwitch
+  }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
+    <ThemeProvider theme={GeneralThemeProps}>
+      <GlobalStyle />
+      <MainContainer>
+        <TopBar />
+        <Page />
+        <Footer />
+      </MainContainer>
+    </ThemeProvider>
   )
 }
 
